@@ -1,6 +1,7 @@
 #include "main.h" 
 
 #include <stdio.h>
+#include <pthread.h>
 
 void * 
 task_one(void)
@@ -55,6 +56,7 @@ task_four(void)
 
 int main(void) 
 {
-  printf("Hello world\n");
+
+
   return 0;
 }
