@@ -16,4 +16,6 @@ typedef int64_t  i64;
 typedef float    r32;
 typedef double   r64;
 
+#define internal static
+
 #endif

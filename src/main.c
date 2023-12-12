@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-void * 
+internal void * 
 task_one(void)
 {
   while(1)
@@ -16,7 +16,7 @@ task_one(void)
   }
 }
 
-void * 
+internal void * 
 task_two(void)
 {
   while(1)
@@ -29,7 +29,7 @@ task_two(void)
   }
 }
 
-void * 
+internal void * 
 task_three(void)
 {
   while(1)
@@ -41,7 +41,8 @@ task_three(void)
     }
   }
 }
-void * 
+
+internal void * 
 task_four(void)
 {
   while(1)
@@ -54,9 +55,26 @@ task_four(void)
   }
 }
 
+#define N_TASKS 4
+
 int main(void) 
 {
+  pthread_t tasks[N_TASKS];
+  pthread_attr_t task_attribute;
 
+  pthread_attr_init(&task_attribute);
+  
+  pthread_attr_setschedpolicy(&task_attribute, SCHED_RR);
+
+  pthread_create(&tasks[0], &task_attribute, (void*) task_one,   NULL);
+  pthread_create(&tasks[1], &task_attribute, (void*) task_two,   NULL);
+  pthread_create(&tasks[2], &task_attribute, (void*) task_three, NULL);
+  pthread_create(&tasks[3], &task_attribute, (void*) task_four,  NULL);
+
+  for (u8 n = 0; n < N_TASKS; n++)
+  {
+    pthread_join(tasks[n], 0);
+  }
 
   return 0;
 }

@@ -4,6 +4,6 @@ mkdir -p bin/
 
 cd ./bin
 
-gcc -g ../src/main.c -o app
+gcc -g -O0 ../src/main.c -o app
 
 cd ..
