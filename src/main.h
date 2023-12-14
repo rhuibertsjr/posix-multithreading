@@ -17,5 +17,9 @@ typedef float    r32;
 typedef double   r64;
 
 #define internal static
+#define global   static
+
+#define SEC(x) ((x) * 1000000000LL)
+#define NSEC_PER_SEC 1000000000
 
 #endif
