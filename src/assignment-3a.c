@@ -26,9 +26,12 @@ task_one ()
   while(1)
   {
     if (execution_counter == 0)
+    {
       sem_wait(&binairy_semaphore);
+      printf("\n");
+    }
 
-    printf("thread_one()::%u -> section 1.\n", execution_counter);
+    printf("thread_one()::%u -> section 1.\n", execution_counter + 1);
 
     execution_counter += 1;
 
@@ -62,9 +65,12 @@ task_two ()
   while(1)
   {
     if (execution_counter == 0)
+    {
       sem_wait(&binairy_semaphore);
+      printf("\n");
+    }
 
-    printf("thread_two()::%u -> section 2.\n", execution_counter);
+    printf("thread_two()::%u -> section 2.\n", execution_counter + 1);
 
     execution_counter += 1;
 
