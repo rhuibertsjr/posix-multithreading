@@ -4,9 +4,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <sched.h>
 #include <time.h>
+
+typedef void* (*tasks_func)(void);
 
 internal void * 
 task_one(void)
@@ -66,6 +69,7 @@ task_four(void)
 int main(void) 
 {
   // rhjr: run tasks on core n. 0
+
   cpu_set_t mask;
   CPU_ZERO(&mask);
   CPU_SET(0, &mask);
@@ -75,27 +79,36 @@ int main(void)
   pthread_t tasks[N_TASKS];
   pthread_attr_t task_attribute[N_TASKS]; 
 
-  for (u8 n = 0; n < N_TASKS; n++)
+  tasks_func tasks_functions[N_TASKS] = {
+    task_one, task_two, task_three, task_four };
+
+  for (u8 n = 4; n != 0; n--)
   {
     struct sched_param param;
 
     pthread_attr_init(&task_attribute[n]);
+
     pthread_attr_setschedpolicy(&task_attribute[n], SCHED_RR);
     pthread_attr_getschedparam(&task_attribute[n], &param);
 
-    if (n > 1)
-      param.sched_priority = 20;
+    if (n > 2)
+      param.sched_priority = 150;
     else
       param.sched_priority = 10;
 
+    printf("Task %u priority -> %u\n", n, param.sched_priority);
+
     pthread_attr_setinheritsched(&task_attribute[n], PTHREAD_EXPLICIT_SCHED);
     pthread_attr_setschedparam(&task_attribute[n], &param);
-  }
 
-  pthread_create(&tasks[0], &task_attribute[0], (void*) task_one,   NULL);
-  pthread_create(&tasks[1], &task_attribute[1], (void*) task_two,   NULL);
-  pthread_create(&tasks[2], &task_attribute[2], (void*) task_three, NULL);
-  pthread_create(&tasks[3], &task_attribute[3], (void*) task_four,  NULL);
+    u32 result = 
+      pthread_create(&tasks[n], &task_attribute[n], (void*) tasks_functions[n], NULL);
+
+    if (result)
+    {
+      printf("ERROR: pthread_create() -> %s\n", strerror(result));
+    }
+  }
 
   for (u8 n = 0; n < N_TASKS; n++)
   {
