@@ -28,9 +28,9 @@ task_one ()
     if (execution_counter == 0)
       sem_wait(&binairy_semaphore);
 
-    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &deadline, NULL);
-
     printf("thread_one()::%u -> section 1.\n", execution_counter);
+
+    execution_counter += 1;
 
     if (execution_counter == EXECUTION_CYCLE)
     {
@@ -42,7 +42,8 @@ task_one ()
     deadline.tv_nsec += TASK_FREQ;
     deadline.tv_sec += deadline.tv_nsec / NSEC_PER_SEC;
     deadline.tv_nsec %= NSEC_PER_SEC;
-    execution_counter += 1;
+
+    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &deadline, NULL);
   }
 
   return NULL;
@@ -63,9 +64,9 @@ task_two ()
     if (execution_counter == 0)
       sem_wait(&binairy_semaphore);
 
-    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &deadline, NULL);
-
     printf("thread_two()::%u -> section 2.\n", execution_counter);
+
+    execution_counter += 1;
 
     if (execution_counter == EXECUTION_CYCLE)
     {
@@ -77,7 +78,8 @@ task_two ()
     deadline.tv_nsec += TASK_FREQ;
     deadline.tv_sec += deadline.tv_nsec / NSEC_PER_SEC;
     deadline.tv_nsec %= NSEC_PER_SEC;
-    execution_counter += 1;
+
+    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &deadline, NULL);
   }
 
   return NULL;
