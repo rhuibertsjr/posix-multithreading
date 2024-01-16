@@ -76,11 +76,10 @@ int main(void)
   struct mq_attr mailbox_attri = {
     .mq_flags   = 0,
     .mq_maxmsg  = N, 
-    .mq_msgsize = sizeof(r32) * N,
-    .mq_curmsgs = 0 
+    .mq_msgsize = sizeof(r32) * N
   };
 
-  mqd_t mailbox = mq_open("/mailbox", O_CREAT | O_RDWR, (mode_t) 0777, &mailbox_attri);
+  mqd_t mailbox = mq_open("/mailbox", O_CREAT | O_RDWR, (mode_t) 0644, &mailbox_attri);
 
   if (mailbox == -1)
   {
